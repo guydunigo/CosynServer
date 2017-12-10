@@ -1,0 +1,22 @@
+{
+  "name": "cosynserver",
+  "version": "1.0.0",
+  "description": "Collaborative Synthetizer with NodeJs and Angular (Server)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guydunigo/CosynServer.git"
+  },
+  "author": "COLMAIRE Klervi & GONI Guillaume",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guydunigo/CosynServer/issues"
+  },
+  "homepage": "https://github.com/guydunigo/CosynServer#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
