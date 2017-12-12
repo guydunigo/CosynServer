@@ -20,7 +20,7 @@ dbRouter.route('/')
             db.collection('keyBoards')
                 .find({})
                 .toArray((err, keyBoards) => {
-                    if (!err) response.json(keyBoards.map(x => x.name));
+                    if (!err) response.json(keyBoards);
                     else console.error('Failed to get the beers list');
                 })
         );
@@ -67,6 +67,26 @@ dbRouter.route('/:keyBoard_id')
         });
     });
 
+dbRouter.route('/:keyBoard_id/lock')
+    .get((request, response) => {
+        Database(db => {
+            db.collection('keyBoards')
+                    .findOne({id: request.params.keyBoard_id})
+                    .then(kb => {
+                        kb._id = undefined;
+                        db.collection('playKeyBoards')
+                            .findOne({id:kb.id})
+                            .then(kbs => { 
+                                console.log(kbs); 
+                                kbs === null?
+                                (db.collection('playKeyBoards').insert(kb), response.json(kb).send()):(
+                                response.json('id already use in play list').send());
+                            });
+                       
+                    });
+        })
+    })
+
 dbRouter.route('/:keyBoard_id/keys/:key_id')
     .get((request, response) => {
         Database(db =>
@@ -79,7 +99,13 @@ dbRouter.route('/:keyBoard_id/keys/:key_id')
                     response.json(keys).send()}
                     )
         )
-    });
+    })
+    /*.post((request,response)=>{
+        console.log(request.body)
+        Database(db => db.collection('keyBoards').insert(request.body))
+        return response.json(request.body).send();
+    })*/
+;
 
 
 exports.dbRouter = dbRouter;
