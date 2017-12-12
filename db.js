@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 
-const url = 'mongodb://localhost:4400/enibeers';
+const url = 'mongodb://localhost:4400/keyboards';
 let DBInstance = null;
 MongoClient.connect(url).then(db => DBInstance = db);
 
@@ -9,7 +9,7 @@ module.exports = (cb) => {
     if (DBInstance === null) {
         MongoClient.connect(url, (error, db) => {
             console.log('Connected correctly to server');
-            DBInstance = db.db('enibeers');
+            DBInstance = db.db('keyboards');
             return cb(DBInstance);
         });
     }

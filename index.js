@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const beerRouter = require('./router-sample').beerRouter;
+const dbRouter = require('./db-router').dbRouter;
 
 const app = express();
 
@@ -28,6 +28,6 @@ app.get('/static', (req, res) => res.redirect('static/index.html'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/beers', beerRouter);
+app.use('/keyboards', dbRouter);
 
 app.listen(PORT, () => console.log('Web app started on port ' + PORT + '. '));
