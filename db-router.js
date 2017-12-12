@@ -38,6 +38,10 @@ dbRouter.route('/')
     })
 
 dbRouter.route('/:keyBoard_id')
+    .options((request,response) => {
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        response.send('Ok');
+    })
     .get((request,response)=>{
         response.setHeader('Access-Control-Allow-Origin', '*');
         console.log(typeof request.params.keyBoard_id);
@@ -77,6 +81,10 @@ dbRouter.route('/:keyBoard_id')
     });
 
 dbRouter.route('/:keyBoard_id/lock')
+    .options((request,response) => {
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        response.send('Ok');
+    })
     .get((request, response) => {
         response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db => {
@@ -98,6 +106,10 @@ dbRouter.route('/:keyBoard_id/lock')
     })
 
 dbRouter.route('/:keyBoard_id/keys/:key_id')
+    .options((request,response) => {
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        response.send('Ok');
+    })
     .get((request, response) => {
         response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db =>
