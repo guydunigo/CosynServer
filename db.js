@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 
-const url = 'mongodb://localhost:9000/enibeers';
+const url = 'mongodb://localhost:4400/enibeers';
 let DBInstance = null;
 MongoClient.connect(url).then(db => DBInstance = db);
 

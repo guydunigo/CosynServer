@@ -11,19 +11,22 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "problemMatcher": []
         },
         {
             "label": "db",
             "type": "shell",
             "command": "npm run db",
-            "isBackground": true
+            "isBackground": true,
+            "problemMatcher": []
         },
         {
             "label": "windb",
             "type": "shell",
             "command": "npm run windb",
-            "isBackground": true
+            "isBackground": true,
+            "problemMatcher": []
         }
     ]
 }
