@@ -51,6 +51,7 @@ dbRouter.route('/:keyBoard_id')
                 .findOne({ id: request.params.keyBoard_id })
                 .then(keyBoard => {
                     console.log(keyBoard);
+                    keyBoard.keys = undefined;
                     response.json(keyBoard);
                 });
         }
@@ -105,6 +106,23 @@ dbRouter.route('/:keyBoard_id/lock')
         });
     });
 
+dbRouter.route('/:keyBoard_id/keys')
+    .options((request, response) => {
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        response.send('Ok');
+    })
+    .get((request, response) => {
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        Database(db =>
+            db.collection('keyBoards')
+                .findOne({ id: request.params.keyBoard_id })
+                .then(keyBoard => {
+                    response.json(keyBoard.keys).send();
+                }
+                )
+        );
+    });
+
 dbRouter.route('/:keyBoard_id/keys/:key_id')
     .options((request, response) => {
         response.setHeader('Access-Control-Allow-Origin', '*');
@@ -117,9 +135,9 @@ dbRouter.route('/:keyBoard_id/keys/:key_id')
                 .findOne({ id: request.params.keyBoard_id })
                 .then(keyBoard => {
                     console.log(request.params.key_id);
-                    const keys = keyBoard.keys.filter(key => key.id === request.params.key_id);
-                    console.log(keys);
-                    response.json(keys).send();
+                    const key = keyBoard.keys.find(key => key.id === request.params.key_id);
+                    console.log(key);
+                    response.json(key).send();
                 }
                 )
         );
