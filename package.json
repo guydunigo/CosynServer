@@ -4,7 +4,8 @@
   "description": "Collaborative Synthetizer with NodeJs and Angular (Server)",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "db": "mongod --port 4400 --dbpath db/"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,8 @@
   },
   "homepage": "https://github.com/guydunigo/CosynServer#readme",
   "dependencies": {
-    "express": "^4.16.2"
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongodb": "^3.0.0-rc0"
   }
 }

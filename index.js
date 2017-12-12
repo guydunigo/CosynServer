@@ -1,4 +1,7 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+
+const beerRouter = require('./router-sample').beerRouter;
 
 const app = express();
 
@@ -18,8 +21,13 @@ app.use('/todo', todoRouter);
 // ----------
 
 // ----- Display static folder as public -----
-app.use('/static',express.static('public'));
+app.use('/static', express.static('public'));
 // ----------
 app.get('/static', (req, res) => res.redirect('static/index.html'));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use('/beers', beerRouter);
 
 app.listen(PORT, () => console.log('Web app started on port ' + PORT + '. '));
