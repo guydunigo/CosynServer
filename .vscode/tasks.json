@@ -1,0 +1,29 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start server",
+            "type": "shell",
+            "command": "npm run start",
+            "isBackground": true,
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "db",
+            "type": "shell",
+            "command": "npm run db",
+            "isBackground": true
+        },
+        {
+            "label": "windb",
+            "type": "shell",
+            "command": "npm run windb",
+            "isBackground": true
+        }
+    ]
+}
