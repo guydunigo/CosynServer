@@ -33,13 +33,13 @@ dbRouter.route('/')
 
 dbRouter.route('/:keyBoard_id')
     .get((request,response)=>{
-        //console.log(typeof request.params.keyBoard_id);
+        console.log(typeof request.params.keyBoard_id);
         Database(db => {
             //console.log(db);
             db.collection('keyBoards')
                     .findOne({id: request.params.keyBoard_id})
                     .then(keyBoard =>{
-                        //console.log(keyBoard);
+                        console.log(keyBoard);
                         response.json(keyBoard)
                     });
         }
@@ -67,5 +67,20 @@ dbRouter.route('/:keyBoard_id')
         });
     });
 
-    exports.dbRouter = dbRouter;
+dbRouter.route('/:keyBoard_id/keys/:key_id')
+    .get((request, response) => {
+        Database(db =>
+            db.collection('keyBoards')
+                .findOne({id: request.params.keyBoard_id})
+                .then(keyBoard => {
+                    console.log(request.params.key_id)
+                    keys = keyBoard.keys.filter(key => key.id === request.params.key_id)
+                    console.log(keys);
+                    response.json(keys).send()}
+                    )
+        )
+    });
+
+
+exports.dbRouter = dbRouter;
 
