@@ -15,7 +15,12 @@ Database((db) => {
 
 const dbRouter = express.Router();
 dbRouter.route('/')
+   .options((request,response) => {
+     response.setHeader('Access-Control-Allow-Origin', '*');
+     response.send('Ok');
+   })
     .get((request, response)=>{
+        response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db => 
             db.collection('keyBoards')
                 .find({})
@@ -26,6 +31,7 @@ dbRouter.route('/')
         );
     })
     .post((request,response)=>{
+        response.setHeader('Access-Control-Allow-Origin', '*');
         //console.log(request.body)
         Database(db => db.collection('keyBoards').insert(request.body))
         return response.json(request.body).send();
@@ -33,6 +39,7 @@ dbRouter.route('/')
 
 dbRouter.route('/:keyBoard_id')
     .get((request,response)=>{
+        response.setHeader('Access-Control-Allow-Origin', '*');
         console.log(typeof request.params.keyBoard_id);
         Database(db => {
             //console.log(db);
@@ -46,6 +53,7 @@ dbRouter.route('/:keyBoard_id')
         );
     })
     .put((request, response)=>{
+        response.setHeader('Access-Control-Allow-Origin', '*');
         // delete
         keyBoards = keyBoards.filter(keyBoard => keyBoard.id !==  request.params.keyBoard_id)
         Database(db =>
@@ -60,7 +68,8 @@ dbRouter.route('/:keyBoard_id')
         return response.json(request.body).send();
     })
     .delete((request, response)=>{
-        keyBoards = keyBoards.filter(keyBoard => keyBoard.id !== request.params.keyBoard_id)
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        //keyBoards = keyBoards.filter(keyBoard => keyBoard.id !== request.params.keyBoard_id)
         Database(db => {
             db.collection('keyBoards')
                 .findOneAndDelete({id: request.params.keyBoard_id})
@@ -69,6 +78,7 @@ dbRouter.route('/:keyBoard_id')
 
 dbRouter.route('/:keyBoard_id/lock')
     .get((request, response) => {
+        response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db => {
             db.collection('keyBoards')
                     .findOne({id: request.params.keyBoard_id})
@@ -89,6 +99,7 @@ dbRouter.route('/:keyBoard_id/lock')
 
 dbRouter.route('/:keyBoard_id/keys/:key_id')
     .get((request, response) => {
+        response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db =>
             db.collection('keyBoards')
                 .findOne({id: request.params.keyBoard_id})

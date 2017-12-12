@@ -4,6 +4,7 @@ const Database = require('./db');
 const dbPlayRouter = express.Router();
 dbPlayRouter.route('/')
     .get((request, response)=>{
+        response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db => 
             db.collection('playKeyBoards')
                 .find({})
@@ -16,12 +17,18 @@ dbPlayRouter.route('/')
 
 dbPlayRouter.route('/:keyBoard_id')
     .get((request, response)=>{
+        response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db =>
             db.collection('playKeyBoards')
                 .find({id:request.params.keyBoard_id})
-                .then(boards => response.json(boards).send()
-            )
+                .then(boards => response.json(boards).send()) // fonctionne ??  > find not a function
         )
+    })
+    .delete((request, response)=>{
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        Database(db =>
+            db.collection('playKeyBoards')
+                .findOneAndDelete({id:request.params.keyBoard_id}))
     })
 
 exports.dbPlayRouter = dbPlayRouter;
