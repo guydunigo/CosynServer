@@ -1,26 +1,34 @@
 const express = require('express');
 const Database = require('./db');
 
-var keyBoards = require('./keyboards.json');
+const KEYBOARDS = require('./keyboards.json');
 
 Database((db) => {
     const col = db.collection('keyBoards');
     col.count().then((c) => {
         if (c === 0) {
-            col.insertMany(keyBoards);
+            col.insertMany(KEYBOARDS);
             console.log('enibeers.beers colection filled with the Json file.');
         }
     });
 });
 
 const dbRouter = express.Router();
+
+dbRouter.route('/reset')
+    .get((req, res) => {
+        Database(db => {
+            const col = db.collection('keyBoards');
+            col.drop();
+            col.insertMany(KEYBOARDS);
+            console.log('enibeers.beers colection filled with the Json file.');
+        });
+        console.log('Db reset');
+        return res.send('Db reset');
+    });
+
 dbRouter.route('/')
-    .options((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
-        response.send('Ok');
-    })
     .get((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db =>
             db.collection('keyBoards')
                 .find({})
@@ -31,26 +39,24 @@ dbRouter.route('/')
         );
     })
     .post((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         //console.log(request.body)
-        Database(db => db.collection('keyBoards').insert(request.body));
-        return response.json(request.body).send();
+        const kb = request.body;
+        kb.id = kb.name.replace(/[#$ /\\]/g, '_');
+        kb.keys = [];
+
+        Database(db => db.collection('keyBoards').insert(kb));
+        return response.json(kb);
     });
 
 dbRouter.route('/:keyBoard_id')
-    .options((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
-        response.send('Ok');
-    })
     .get((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         console.log(typeof request.params.keyBoard_id);
         Database(db => {
             //console.log(db);
             db.collection('keyBoards')
                 .findOne({ id: request.params.keyBoard_id })
                 .then(keyBoard => {
-                    console.log(keyBoard);
+                    //console.log(keyBoard);
                     keyBoard.keys = undefined;
                     response.json(keyBoard);
                 });
@@ -58,34 +64,31 @@ dbRouter.route('/:keyBoard_id')
         );
     })
     .put((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         // delete
-        keyBoards = keyBoards.filter(keyBoard => keyBoard.id !== request.params.keyBoard_id);
         Database(db =>
             db.collection('keyBoards')
                 .findOneAndDelete({ id: request.params.keyBoard_id })
+                .then(() =>
+                    console.log(`${request.params.keyBoard_id} deleted`))
         );
         // post
         Database(db =>
             db.collection('keyBoards')
                 .insert(request.body)
+                .then(() =>
+                    console.log(`${request.params.keyBoard_id} added`))
         );
-        return response.json(request.body).send();
+        return response.json(request.body);
     })
     .delete((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
-        //keyBoards = keyBoards.filter(keyBoard => keyBoard.id !== request.params.keyBoard_id)
         Database(db => {
             db.collection('keyBoards')
-                .findOneAndDelete({ id: request.params.keyBoard_id });
+                .findOneAndDelete({ id: request.params.keyBoard_id })
+                .then(kb => response.json(kb));
         });
     });
 
 dbRouter.route('/:keyBoard_id/lock')
-    .options((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
-        response.send('Ok');
-    })
     .get((request, response) => {
         response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db => {
@@ -107,10 +110,6 @@ dbRouter.route('/:keyBoard_id/lock')
     });
 
 dbRouter.route('/:keyBoard_id/keys')
-    .options((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
-        response.send('Ok');
-    })
     .get((request, response) => {
         response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db =>
@@ -124,10 +123,6 @@ dbRouter.route('/:keyBoard_id/keys')
     });
 
 dbRouter.route('/:keyBoard_id/keys/:key_id')
-    .options((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
-        response.send('Ok');
-    })
     .get((request, response) => {
         response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db =>
