@@ -3,9 +3,13 @@ const Database = require('./db');
 
 const dbPlayRouter = express.Router();
 dbPlayRouter.route('/')
-    .get((request, response) => {
+    .options((request,response) => {
         response.setHeader('Access-Control-Allow-Origin', '*');
-        Database(db =>
+        response.send('Ok');
+    })
+    .get((request, response)=>{
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        Database(db => 
             db.collection('playKeyBoards')
                 .find({})
                 .toArray((err, keyBoards) => {
@@ -13,22 +17,26 @@ dbPlayRouter.route('/')
                     else console.error('Failed to get the play_keyboards list');
                 })
         );
-    });
+    })
 
 dbPlayRouter.route('/:keyBoard_id')
-    .get((request, response) => {
+    .options((request,response) => {
         response.setHeader('Access-Control-Allow-Origin', '*');
-        Database(db =>
-            db.collection('playKeyBoards')
-                .find({ id: request.params.keyBoard_id })
-                .then(boards => response.json(boards).send()) // fonctionne ??  > find not a function
-        );
+        response.send('Ok');
     })
-    .delete((request, response) => {
+    .get((request, response)=>{
         response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db =>
             db.collection('playKeyBoards')
-                .findOneAndDelete({ id: request.params.keyBoard_id }));
-    });
+                .find({id:request.params.keyBoard_id})
+                .then(boards => response.json(boards).send()) // fonctionne ??  > find not a function
+        )
+    })
+    .delete((request, response)=>{
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        Database(db =>
+            db.collection('playKeyBoards')
+                .findOneAndDelete({id:request.params.keyBoard_id}))
+    })
 
 exports.dbPlayRouter = dbPlayRouter;

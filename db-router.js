@@ -8,7 +8,7 @@ Database((db) => {
     col.count().then((c) => {
         if (c === 0) {
             col.insertMany(KEYBOARDS);
-            console.log('enibeers.beers colection filled with the Json file.');
+            console.log('keyboards collection filled with the Json file.');
         }
     });
 });
@@ -21,7 +21,7 @@ dbRouter.route('/reset')
             const col = db.collection('keyBoards');
             col.drop();
             col.insertMany(KEYBOARDS);
-            console.log('enibeers.beers colection filled with the Json file.');
+            console.log('keyboards collection filled with the Json file.');
         });
         console.log('Db reset');
         return res.send('Db reset');
@@ -34,7 +34,7 @@ dbRouter.route('/')
                 .find({})
                 .toArray((err, keyBoards) => {
                     if (!err) response.json(keyBoards);
-                    else console.error('Failed to get the beers list');
+                    else console.error('Failed to get the keyboards list');
                 })
         );
     })
@@ -117,8 +117,7 @@ dbRouter.route('/:keyBoard_id/keys')
                 .findOne({ id: request.params.keyBoard_id })
                 .then(keyBoard => {
                     response.json(keyBoard.keys).send();
-                }
-                )
+                })
         );
     });
 
