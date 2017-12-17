@@ -3,11 +3,6 @@ const { Database, CONF_COL, PLAY_COL } = require('./db');
 
 const KEYBOARDS = require('./keyboards.json');
 
-/*
-const CONF_COL = 'keyBoards';
-const PLAY_COL = 'playKeyBoards';
-*/
-
 Database((db) => {
     const col = db.collection(CONF_COL);
     col.count().then((c) => {
@@ -23,27 +18,31 @@ const findNewId = function (colName, baseId) {
         db.collection(colName)
             .find({})
             .toArray()
-            .then(list => {
-                let found = false;
-                let counter = -1, prev_counter = -1;
-                const base = baseId.replace(/[#$ /\\]/g, '_');
-                let name = base;
-
-                while (!found) {
-                    name = counter === -1 ? base : `${base}_${counter}`;
-                    prev_counter = counter;
-                    for (const elmt of list) {
-                        if (elmt.id === name) {
-                            counter++;
-                            break;
-                        }
-                    }
-                    if (prev_counter === counter) // found
-                        found = true;
-                }
-                return Promise.resolve(name);
-            })
+            .then(list =>
+                Promise.resolve(findNewIdList(list, baseId)))
     );
+};
+
+const findNewIdList = function (list, baseId) {
+    let found = false;
+    let counter = -1, prev_counter = -1;
+    const base = baseId.trim().replace(/[#$ /\\]/g, '_');
+    let name = base;
+
+    while (!found) {
+        name = counter === -1 ? base : `${base}_${counter}`;
+        prev_counter = counter;
+        for (const elmt of list) {
+            if (elmt.id === name) {
+                counter++;
+                break;
+            }
+        }
+        if (prev_counter === counter) // found
+            found = true;
+    }
+
+    return name;
 };
 
 const dbRouter = express.Router();
@@ -99,11 +98,9 @@ dbRouter.route('/')
 dbRouter.route('/:keyBoard_id')
     .get((request, response) => {
         Database(db => {
-            //console.log(db);
             db.collection(CONF_COL)
                 .findOne({ id: request.params.keyBoard_id })
                 .then(keyBoard => {
-                    //console.log(keyBoard);
                     keyBoard.keys = undefined;
                     console.log(`Config - Keyboard ${request.params.keyBoard_id} served`);
                     response.json(keyBoard);
@@ -143,65 +140,69 @@ dbRouter.route('/:keyBoard_id')
 
 dbRouter.route('/:keyBoard_id/lock')
     .get((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db => {
             db.collection(CONF_COL)
                 .findOne({ id: request.params.keyBoard_id })
                 .then(kb => {
                     kb._id = undefined;
-                    db.collection(PLAY_COL)
-                        .findOne({ id: kb.id })
-                        .then(kbs => {
-                            if (kbs === null) {
-                                db.collection(PLAY_COL).insert(kb);
-                                console.log(`Config - Keyboard ${request.params.keyBoard_id} locked`);
-
-                                response.json(kb);
-                            }
-                            else {
-                                // find new id
-                                response.json('id already use in play list').send();
-                            }
+                    findNewId(PLAY_COL, kb.name)
+                        .then(id => {
+                            kb.id = id;
+                            db.collection(PLAY_COL).insert(kb);
+                            console.log(`Config - Keyboard ${request.params.keyBoard_id} locked`);
+                            return response.json(kb);
                         });
-
                 });
         });
     });
 
 dbRouter.route('/:keyBoard_id/keys')
     .get((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db =>
             db.collection(CONF_COL)
                 .findOne({ id: request.params.keyBoard_id })
                 .then(keyBoard => {
-                    response.json(keyBoard.keys).send();
-                }
-                )
+                    console.log(`Config - Keys from keyboard ${request.params.keyBoard_id} served`);
+                    return response.json(keyBoard.keys);
+                })
         );
+    })
+    .post((request, response) => {
+        const key = request.body;
+        if (key.name && key.src) {
+            Database(db => db.collection(CONF_COL)
+                .findOne({ id: request.params.keyBoard_id })
+                .then(kb => {
+                    key.id = findNewIdList(kb.keys, key.name);
+                    db.collection(CONF_COL)
+                        .updateOne({ id: request.params.keyBoard_id }, {
+                            $addToSet: {
+                                keys: key
+                            }
+                        });
+                    console.log(`Config - Key ${key.id} in keyboard ${request.params.keyBoard_id} added`);
+                    return response.json(key);
+                })
+            );
+        }
+        else {
+            console.log(`ERROR # Config - Key in keyboard ${request.params.keyBoard_id} add error : No name or src specified`);
+            return response.send(`ERROR # Config - Key in keyboard ${request.params.keyBoard_id} add error : No name or src specified`);
+        }
     });
 
 dbRouter.route('/:keyBoard_id/keys/:key_id')
     .get((request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         Database(db =>
             db.collection(CONF_COL)
                 .findOne({ id: request.params.keyBoard_id })
                 .then(keyBoard => {
-                    console.log(request.params.key_id);
                     const key = keyBoard.keys.find(key => key.id === request.params.key_id);
-                    console.log(key);
-                    response.json(key).send();
-                }
-                )
+                    console.log(`Config - Key ${key.id} in keyboard ${request.params.keyBoard_id} served`);
+                    return response.json(key);
+                })
         );
     });
-/*.post((request,response)=>{
-    console.log(request.body)
-    Database(db => db.collection(CONF_COL).insert(request.body))
-    return response.json(request.body).send();
-})*/
-
 
 exports.dbRouter = dbRouter;
 
