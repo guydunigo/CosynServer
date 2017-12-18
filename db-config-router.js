@@ -124,7 +124,7 @@ dbRouter.route('/:keyBoard_id')
         }
         else {
             console.log(`ERROR # Config - Keyboard ${request.params.keyBoard_id} update error : No name specified`);
-            return response.send('ERROR # Config - Keyboard add error : No name specified');
+            return response.send('ERROR # Config - Keyboard update error : No name specified');
         }
     })
     .delete((request, response) => {
@@ -174,6 +174,8 @@ dbRouter.route('/:keyBoard_id/keys')
                 .findOne({ id: request.params.keyBoard_id })
                 .then(kb => {
                     key.id = findNewIdList(kb.keys, key.name);
+                    key.volume = 1.0;
+                    key.enabled = false;
                     db.collection(CONF_COL)
                         .updateOne({ id: request.params.keyBoard_id }, {
                             $addToSet: {
@@ -202,6 +204,37 @@ dbRouter.route('/:keyBoard_id/keys/:key_id')
                     return response.json(key);
                 })
         );
+    })
+    .put((request, response) => {
+        if (request.body.name && request.body.src) {
+            Database(db =>
+                db.collection(CONF_COL)
+                    .updateOne({ id: request.params.keyBoard_id, 'keys.id': request.params.key_id }, {
+                        $set: { name: request.body.name, src: request.body.src }
+                    })
+                    .then(key => {
+                        console.log(`Config - Key ${request.params.key_id} in keyboard ${request.params.keyBoard_id} updated`);
+                        return response.json(key);
+                    })
+            );
+
+        }
+        else {
+            console.log(`ERROR # Config - Key ${request.params.key_id} in keyboard ${request.params.keyBoard_id} update error : No name or src specified`);
+            return response.send(`ERROR # Config - Key ${request.params.key_id} in keyboard ${request.params.keyBoard_id} update error : No name or src specified`);
+        }
+    })
+    .delete((request, response) => {
+        Database(db => {
+            db.collection(CONF_COL)
+                .updateOne({ id: request.params.keyBoard_id }, {
+                    $pull: { keys: { id: request.params.key_id } }
+                })
+                .then(kb => {
+                    console.log(`Config - Key ${request.params.key_id} in keyboard ${request.params.keyBoard_id}  deleted`);
+                    response.json(kb);
+                });
+        });
     });
 
 exports.dbRouter = dbRouter;
