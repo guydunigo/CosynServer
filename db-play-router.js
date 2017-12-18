@@ -58,6 +58,7 @@ dbPlayRouter.route('/:keyBoard_id/keys/:key_id/press')
         Database(db =>
             db.collection(PLAY_COL)
                 .updateOne({ id: request.params.keyBoard_id, 'keys.id': request.params.key_id }, { $set: { 'keys.$.enabled': true } })
+                .then(() => response.json({ enabled: true }))
         );
     });
 
@@ -66,6 +67,7 @@ dbPlayRouter.route('/:keyBoard_id/keys/:key_id/release')
         Database(db =>
             db.collection(PLAY_COL)
                 .updateOne({ id: request.params.keyBoard_id, 'keys.id': request.params.key_id }, { $set: { 'keys.$.enabled': false } })
+                .then(() => response.json({ enabled: false }))
         );
     });
 
@@ -75,6 +77,7 @@ dbPlayRouter.route('/:keyBoard_id/keys/:key_id/volume')
         Database(db =>
             db.collection(PLAY_COL)
                 .updateOne({ id: request.params.keyBoard_id, 'keys.id': request.params.key_id }, { $set: { 'keys.$.volume': Number.parseInt(request.body.volume) } })
+                .then(() => response.json({ volume: request.body.volume }))
         );
     });
 
