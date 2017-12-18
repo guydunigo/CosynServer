@@ -6,35 +6,35 @@
         {
             "id": "0",
             "name": "do",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/marteauhit.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "1",
             "name": "re",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/epeehit.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "2",
             "name": "mi",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/eau_short.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "3",
             "name": "fa",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/heartbeat.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "4",
             "name": "sol",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/walking-in-snow-soundjay_short.webm",
             "enabled": false,
             "volume": 1
         }
@@ -47,35 +47,35 @@
         {
             "id": "0",
             "name": "do",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/marteauhit.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "1",
             "name": "re",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/epeehit.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "2",
             "name": "mi",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/eau_short.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "3",
             "name": "fa",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/heartbeat.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "4",
             "name": "sol",
-            "src": "/musics/",
+            "src": "https://blindquest.ovh/game/audio/webm/walking-in-snow-soundjay_short.webm",
             "enabled": false,
             "volume": 1
         }

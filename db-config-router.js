@@ -139,7 +139,7 @@ dbRouter.route('/:keyBoard_id')
     });
 
 dbRouter.route('/:keyBoard_id/lock')
-    .get((request, response) => {
+    .put((request, response) => {
         Database(db => {
             db.collection(CONF_COL)
                 .findOne({ id: request.params.keyBoard_id })

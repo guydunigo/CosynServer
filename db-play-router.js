@@ -53,11 +53,19 @@ dbPlayRouter.route('/:keyBoard_id/keys/:key_id')
         );
     });
 
-dbPlayRouter.route('/:keyBoard_id/keys/:key_id/toggle')
+dbPlayRouter.route('/:keyBoard_id/keys/:key_id/press')
     .put((request, response) => {
         Database(db =>
             db.collection(PLAY_COL)
                 .updateOne({ id: request.params.keyBoard_id, 'keys.id': request.params.key_id }, { $set: { 'keys.$.enabled': true } })
+        );
+    });
+
+dbPlayRouter.route('/:keyBoard_id/keys/:key_id/release')
+    .put((request, response) => {
+        Database(db =>
+            db.collection(PLAY_COL)
+                .updateOne({ id: request.params.keyBoard_id, 'keys.id': request.params.key_id }, { $set: { 'keys.$.enabled': false } })
         );
     });
 
