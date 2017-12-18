@@ -11,7 +11,7 @@ const getKeyboard = function (keyBoard_id) {
     );
 };
 
-let responsesTab = {};
+let responsesTab = new Map();
 const respondToPolls = function (keyBoard_id) {
     getKeyboard(keyBoard_id)
         .then(kb => {

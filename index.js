@@ -21,4 +21,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/config', dbConfigRouter);
 app.use('/api/play', dbPlayRouter);
 
+app.use('/sounds', express.static('sounds'));
+
 app.listen(PORT, () => console.log('Web app started on port ' + PORT + '. '));
