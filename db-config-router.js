@@ -56,7 +56,7 @@ dbRouter.route('/reset')
             console.log(`Config - Collection ${CONF_COL} filled with the Json file.`);
         });
         console.log(`Config - Collection ${CONF_COL} reset`);
-        return res.send('Db reset');
+        return res.send(`Config - Collection ${CONF_COL} reset`);
     });
 
 dbRouter.route('/')
