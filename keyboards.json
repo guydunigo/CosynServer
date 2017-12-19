@@ -5,36 +5,71 @@
     "keys": [
         {
             "id": "0",
-            "name": "do",
+            "name": "marteauhit",
             "src": "sounds/marteauhit.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "1",
-            "name": "re",
+            "name": "epeehit",
             "src": "sounds/epeehit.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "2",
-            "name": "mi",
+            "name": "eau_short",
             "src": "sounds/eau_short.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "3",
-            "name": "fa",
+            "name": "heartbeat",
             "src": "sounds/heartbeat.webm",
             "enabled": false,
             "volume": 1
         },
         {
             "id": "4",
-            "name": "sol",
+            "name": "walking_snow",
             "src": "sounds/walking-in-snow-soundjay_short.webm",
+            "enabled": false,
+            "volume": 1
+        },
+        {
+            "id": "5",
+            "name": "boss",
+            "src": "sounds/boss.webm",
+            "enabled": false,
+            "volume": 1
+        },
+        {
+            "id": "6",
+            "name": "caverne",
+            "src": "sounds/caverne.webm",
+            "enabled": false,
+            "volume": 1
+        },
+        {
+            "id": "7",
+            "name": "chateau",
+            "src": "sounds/chateau.webm",
+            "enabled": false,
+            "volume": 1
+        },
+        {
+            "id": "8",
+            "name": "foret",
+            "src": "sounds/foret.webm",
+            "enabled": false,
+            "volume": 1
+        },
+        {
+            "id": "9",
+            "name": "magie",
+            "src": "sounds/magie.webm",
             "enabled": false,
             "volume": 1
         }
