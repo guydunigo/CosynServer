@@ -26,7 +26,8 @@ app.use('/api/play', dbPlayRouter);
 app.use('/sounds', express.static('sounds'));
 
 // ---- redirect unknown path
-app.all('/*', (req, res) => res.redirect('..'));
+app.get('/play/*', (req, res) => res.redirect('..'));
+app.get('/config/*', (req, res) => res.redirect('..'));
 
 
 app.listen(PORT, () => console.log('Web app started on port ' + PORT + '. '));
