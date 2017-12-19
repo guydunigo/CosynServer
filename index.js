@@ -16,7 +16,6 @@ app.use('/', express.static('app'));
 // ----------
 app.get('/', (req, res) => res.redirect('index.html'));
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
