@@ -11,6 +11,7 @@ const getKeyboard = function (keyBoard_id) {
     );
 };
 
+// Long polling :
 let responsesTab = new Map();
 const respondToPolls = function (keyBoard_id) {
     getKeyboard(keyBoard_id)
@@ -19,6 +20,7 @@ const respondToPolls = function (keyBoard_id) {
                 responsesTab[keyBoard_id].pop().json(kb.keys);
         });
 };
+// --------------
 
 dbPlayRouter.route('/reset')
     .get((req, res) => {
@@ -101,6 +103,7 @@ dbPlayRouter.route('/:keyBoard_id/keys/:key_id/volume')
         );
     });
 
+// Long polling
 dbPlayRouter.route('/:keyBoard_id/keys_poll')
     .get((request, response) => {
         if (responsesTab[request.params.keyBoard_id])
@@ -115,5 +118,6 @@ dbPlayRouter.route('/:keyBoard_id/keys_poll')
                     .then(kb => response.json(kb.keys));
             });
     });
+// ------------
 
 exports.dbPlayRouter = dbPlayRouter;
